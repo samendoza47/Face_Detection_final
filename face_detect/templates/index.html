@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+         <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="chrome=1">
+      <title>Face Detection</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="./static/css/styling.css">
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+</head>
+
+  <body>
+
+  <div class="topnav">
+         <a class="active" >Face Detection System </a>
+        <a href="/image-upload-view">Add New User</a>
+         <a href="#news">View All Users</a>
+         <a href="#about">About</a>
+      </div>
+ <div class="container-fluid">
+         <div class="row content">
+            <div class="col-sm-2 sidenav">
+               <div class="loader" id="loader"> </div>
+            </div>
+            <div class="col-sm-9">
+
+               <center>
+                <img src="{{ url_for('video_feed') }}" width="70%" height="70%">
+               </center>
+
+               </form>
+               <br><br>
+            </div>
+         </div>
+      </div>
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8  offset-lg-2">
+
+            </div>
+        </div>
+    </div>
+    </body>
+
+
+</html>

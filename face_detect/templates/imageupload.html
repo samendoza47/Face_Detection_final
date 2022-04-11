@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+         <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="chrome=1">
+      <title>Face Detection</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="./static/css/styling.css">
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+</head>
+<style>
+    /* mirror the image */
+    video, canvas {
+    transform: scale(-1, 1); /*For Firefox (& IE) */
+    -webkit-transform: scale(-1, 1); /*for Chrome & Opera (& Safari) */
+}
+</style>
+<body>
+
+ <div class="topnav">
+         <a href="/" >Face Detection System </a>
+         <a  class="active" href="#">Add New User</a>
+         <a href="#news">View All Users</a>
+         <a href="#contact">Check Failed Access</a>
+         <a href="#about">About</a>
+      </div>
+ <div class="container-fluid">
+         <div class="row content">
+            <div class="col-sm-2 sidenav">
+               <div class="loader" id="loader"> </div>
+            </div>
+            <div class="col-sm-9">
+
+               <input id="personName" class="" placeholder="Person Name" required>
+
+               <center>
+                  <video id="myVideo" autoplay></video>
+               </center>
+               <button type="submit" class="btn btn-success" onclick="sendImage_fromCanvas()">Save Image</button>
+
+               <br><br>
+            </div>
+         </div>
+      </div>
+
+
+
+<script type="text/javascript">
+
+    let v = document.getElementById("myVideo");
+
+    //create a canvas to grab an image for upload
+    let imageCanvas = document.createElement('canvas');
+    let imageCtx = imageCanvas.getContext("2d");
+
+    //Add file blob to a form and post
+    function postFile(file) {
+        let form_data = new FormData();
+        form_data.append("image", file);
+        personName=document.getElementById("personName").value;
+        form_data.append("personName", personName);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:5000/image-upload', true);
+        xhr.onload = function () {
+            if (this.status === 200){
+                console.log("ok");
+                alert("Image saved");  // display string message
+            }
+            else{
+                console.error(xhr);
+            }
+        };
+        xhr.send(form_data);
+    }
+
+    //Get the image from the canvas
+    function sendImage_fromCanvas() {
+
+        //Make sure the canvas is set to the current video size
+        imageCanvas.width = v.videoWidth;
+        imageCanvas.height = v.videoHeight;
+
+        imageCtx.drawImage(v, 0, 0, v.videoWidth, v.videoHeight);
+
+        //Convert the canvas to blob and post the file
+        imageCanvas.toBlob(postFile, 'image/jpeg');
+    }
+
+        window.onload = function () {
+        //Get camera video
+        navigator.mediaDevices.getUserMedia({video: {width: 800, height: 500}, audio: false})
+          .then(stream => { v.srcObject = stream;})
+            .catch(err => { console.log('navigator.getUserMedia error: ', err);
+                          });
+    };
+
+</script>
+</body>
+</html>

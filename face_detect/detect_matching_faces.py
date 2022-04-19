@@ -3,6 +3,7 @@ import os
 import face_recognition
 from os import walk
 
+### Extra Class FOR FUTURE Implementation #####
 
 
 def compare_images(source, target):

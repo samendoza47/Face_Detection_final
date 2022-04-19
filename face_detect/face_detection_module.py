@@ -165,7 +165,7 @@ def gen_frames():
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
             settings.face_detect_on_camera = True
-            print(settings.face_detect_on_camera)
+
 
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()

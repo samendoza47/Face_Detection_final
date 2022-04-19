@@ -1,12 +1,15 @@
-from flask import Flask, render_template, Response, request
+import base64
+
+from flask import Flask, render_template, Response, request, url_for, jsonify, send_file
 import os
 import face_detection_module as fbt
 import settings
+from werkzeug.utils import secure_filename, redirect, send_from_directory
 
+from face_detect.detect_matching_faces import retrive_all
 
 app = Flask(__name__)
 settings.init()
-
 
 # Initialize some variables
 face_locations = []
@@ -15,6 +18,7 @@ face_names = []
 known_face_names = []
 
 
+@app.route('/index')
 @app.route('/')
 def index():
     fbt.encode_all_faces()
@@ -43,6 +47,19 @@ def image_upload():
     i.save('%s/%s' % (completeName, f))
 
     return Response("%s saved" % f)
+
+
+@app.route('/display/<filename>')
+def display_image(filename):
+    cwd = os.getcwd()
+    completeName = os.path.join(cwd, "source",filename)
+    return send_file(completeName, mimetype='image/jpg')
+
+@app.route('/view-all-users')
+def retrive_names():
+    values= retrive_all()
+    return render_template('viewAllImages.html', values=values)
+
 
 
 @app.after_request

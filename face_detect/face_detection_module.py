@@ -51,6 +51,7 @@ def retrive_all():
 def encode_all_faces():
     source_list = retrive_all()
     known_face_encodings.clear()
+
     known_face_names.clear()
     for source in source_list:
         source_name = source.split('.')[0]
@@ -83,6 +84,7 @@ def gen_frames():
     camera = cv2.VideoCapture(0)
     # Define how many faces we want to detect
     detector = dlib.get_frontal_face_detector()
+    font = cv2.FONT_HERSHEY_SIMPLEX
 
     # -----Step 4: Detecting Eyes using landmarks in dlib-----
     predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
@@ -121,8 +123,7 @@ def gen_frames():
                 # Blink detected! Do Something!
                 # Validate if the person has blinked
                 blink_counter = True
-                cv2.putText(frame, "BLINKING", (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
-                            2, (255, 255, 255), 2, cv2.LINE_AA)
+                # cv2.putText(frame, "BLINKING", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 128, 0), 2, cv2.LINE_AA)
                 print(f'Blink action: {blink_counter}')
                 settings.blick_detect_on_camera = True
                 print(settings.blick_detect_on_camera)
@@ -138,7 +139,7 @@ def gen_frames():
         for face_encoding in face_encodings:
             # See if the face is a match for the known face(s)
             matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-            name = "Not Authorized"
+            name = "Unknown"
 
             # Or instead, use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
@@ -162,9 +163,14 @@ def gen_frames():
 
             # Draw a label with a name below the face
             cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-            font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
             settings.face_detect_on_camera = True
+
+        if settings.face_detect_on_camera and settings.blick_detect_on_camera and name != "Unknown":
+            cv2.putText(frame, 'Access granted', (50, 50), font, 1, (0, 255, 0), 2, cv2.LINE_4)
+        else:
+            cv2.putText(frame, 'Not Authorized', (50, 50), font, 1, (0, 0, 255), 2, cv2.LINE_4)
+
 
 
         ret, buffer = cv2.imencode('.jpg', frame)

@@ -6,7 +6,6 @@ import face_detection_module as fbt
 import settings
 from werkzeug.utils import secure_filename, redirect, send_from_directory
 
-from face_detect.detect_matching_faces import retrive_all
 
 app = Flask(__name__)
 settings.init()
@@ -56,8 +55,8 @@ def display_image(filename):
     return send_file(completeName, mimetype='image/jpg')
 
 @app.route('/view-all-users')
-def retrive_names():
-    values= retrive_all()
+def retrive_all_users():
+    values= fbt.retrive_all()
     return render_template('viewAllImages.html', values=values)
 
 

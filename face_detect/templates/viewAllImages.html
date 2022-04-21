@@ -15,7 +15,27 @@
     video, canvas {
     transform: scale(-1, 1); /*For Firefox (& IE) */
     -webkit-transform: scale(-1, 1); /*for Chrome & Opera (& Safari) */
-}
+    }
+
+.img_item{
+	width: 500px;
+    }
+       * {
+      box-sizing: border-box;
+    }
+
+    .column {
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+
+    /* Clearfix (clear floats) */
+    .row::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
 
 </style>
 <body>
@@ -24,7 +44,6 @@
     <a href="/index">Face Detection System </a>
     <a href="/image-upload-view">Add New User</a>
     <a class="active" href="/view-all-users">View All Users</a>
-    <a href="#contact">Check Failed Access</a>
     <a href="#about">About</a>
 </div>
 
@@ -37,12 +56,11 @@
                     <div class="col-12">
                         <h1> Desplaying All Images Stored in Server</h1>
                         {% for filename in values %}
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="{{ url_for('display_image', filename=filename) }}"
+                        <div class="card" >
+                            <img class="img_item" src="{{ url_for('display_image', filename=filename) }}"
                                  alt="Card image cap">
                             <div class="card-body">
-                                <p class="card-text">
-                                <h2>{{ filename }}</h2></p>
+                                <p class="card-text"> <h1>{{ filename.split('.')[0] }}</h1></p>
                             </div>
                         </div>
                         {% endfor %}
